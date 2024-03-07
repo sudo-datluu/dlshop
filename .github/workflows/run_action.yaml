@@ -1,8 +1,8 @@
 name: laravel-deployment
-
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 jobs:
   deploy:
@@ -12,6 +12,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
       run: zip -r deploy.zip ./
+      
     - name: Deploy to EBS
       uses: einaregilsson/beanstalk-deploy@v21
       with:
