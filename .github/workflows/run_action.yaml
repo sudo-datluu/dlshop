@@ -22,7 +22,7 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: dlshop
         environment_name: Dlshop-env-1
-        existing_bucket_name: elasticbeanstalk-ap-southeast-1-762161261983
+        existing_bucket_name: elasticbeanstalk-ap-southeast-2-762161261983
         version_label: ${{ github.sha }}
         region: ap-southeast-2
         deployment_package: deploy.zip
