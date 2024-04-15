@@ -3,12 +3,12 @@
     <a href="cart.php" class="ml-3 nav-link d-flex">
         <i class="fas fa-shopping-cart text-primary"></i>					
     </a>
-    <form action="">					
+    <form action="{{ route('front.home') }}", method="get">					
         <div class="input-group">
-            <input type="text" placeholder="Search For Products" class="form-control" aria-label="Amount (to the nearest dollar)">
-            <span class="input-group-text">
+            <input value="{{ Request::get('search') }}" name="search" type="text" placeholder="Search For Products" class="form-control" aria-label="Amount (to the nearest dollar)">
+            <button class="input-group-text" type="submit">
                 <i class="fa fa-search"></i>
-            </span>
+            </button>
         </div>
     </form>
 </div>	

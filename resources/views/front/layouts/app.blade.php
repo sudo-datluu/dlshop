@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en_AU" />
+
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>DL Shop</title>
@@ -29,13 +30,14 @@
 	<meta name="twitter:image" content="" />
 	<meta name="twitter:image:alt" content="" />
 	<meta name="twitter:card" content="summary_large_image" />
-	
+	<meta name="csrf-token-front" content="{{ csrf_token() }}">
+
 
 	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick.css') }}" />
 	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick-theme.css') }}" />
 	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/style.css') }}" />
-	
-    @yield('custom-css')
+	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/home.css') }}" />
+
 
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,56 +46,85 @@
 
 	<!-- Fav Icon -->
 	<link rel="shortcut icon" type="image/x-icon" href="#" />
+
 </head>
+
 <body data-instant-intensity="mousedown">
 
-<div class="bg-dark top-header">        
-	<div class="container">
-		<div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
-			<div class="col-lg-4 logo">
-				<a href="index.php" class="text-decoration-none">
-					<span class="h1 text-uppercase text-primary bg-dark">DL</span>
-					<span class="h1 text-uppercase text-primary px-2 ml-n1">SHOP</span>
-				</a>
+	<div class="bg-dark top-header">
+		<div class="container">
+			<div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
+				<div class="col-lg-4 logo">
+					<a href="{{route('front.home')}}" class="text-decoration-none">
+						<span class="h1 text-uppercase text-primary bg-dark">DL</span>
+						<span class="h1 text-uppercase text-primary px-2 ml-n1">SHOP</span>
+					</a>
+				</div>
+				@yield('cart-and-search-box')
 			</div>
-            @yield('cart-and-search-box')
 		</div>
 	</div>
-</div>
-<main>    
-    @yield('content')
-</main>
+	<main>
+		<section class="section-6 pt-3">
+		<div class="container">
+			<div class="row">
+				@yield('category')
+				@yield('content')
+			</div>
+		</div>
+	</section>
+	</main>
 
-<footer class="bg-dark mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 mt-3">
-                <div class="copy-right text-center">
-                    <p>© Copyright by letuandat.luu@student.uts.edu.au. All Rights Reserved</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-<script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
-<script src="{{ asset('front-assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
-<script src="{{ asset('front-assets/js/instantpages.5.1.0.min.js') }}"></script>
-<script src="{{ asset('front-assets/js/lazyload.17.6.0.min.js') }}"></script>
-<script src="{{ asset('front-assets/js/slick.min.js') }}"></script>
-<script src="{{ asset('front-assets/js/custom.js') }}"></script>
-<script>
-window.onscroll = function() {myFunction()};
+	<footer class="bg-dark">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 mt-3">
+					<div class="copy-right text-center">
+						<p>© Copyright by letuandat.luu@student.uts.edu.au. All Rights Reserved</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
+	<script src="{{ asset('front-assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
+	<script src="{{ asset('front-assets/js/instantpages.5.1.0.min.js') }}"></script>
+	<script src="{{ asset('front-assets/js/lazyload.17.6.0.min.js') }}"></script>
+	<script src="{{ asset('front-assets/js/slick.min.js') }}"></script>
+	<script src="{{ asset('front-assets/js/custom.js') }}"></script>
+	@yield('customJs')
+	<script>
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token-front"]').attr('content')
+			}
+		});
+		window.onscroll = function() {
+			myFunction()
+		};
 
-var navbar = document.getElementById("navbar");
-var sticky = navbar.offsetTop;
+		var navbar = document.getElementById("navbar");
+		var sticky = navbar.offsetTop;
 
-function myFunction() {
-  if (window.pageYOffset >= sticky) {
-    navbar.classList.add("sticky")
-  } else {
-    navbar.classList.remove("sticky");
-  }
-}
-</script>
+		function myFunction() {
+			if (window.pageYOffset >= sticky) {
+				navbar.classList.add("sticky")
+			} else {
+				navbar.classList.remove("sticky");
+			}
+		}
+		function addToCart(id) {
+			$.ajax({
+				url: "{{ route('front.addToCart') }}",
+				type: "post",
+				data: {id:id},
+				dataType: "json",
+				success: function (response) {
+					alert(response.message);
+				}
+			})
+		}		
+	</script>
 </body>
+
 </html>

@@ -3,8 +3,10 @@
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +19,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return Redirect::to('home');
+});
 
-Route::get('/{categorySlug?}/{subCategorySlug?}', [FrontController::class,'index'])->name('front.home');
+Route::get('home/{categorySlug?}/{subCategorySlug?}', [FrontController::class,'index'])->name('front.home');
+Route::get('/product/{slug}', [FrontController::class,'product'])->name('front.product');
 
+Route::get('/cart', [CartController::class,'cart'])->name('front.cart');
+Route::get('/cart-json', [CartController::class,'cartJson'])->name('front.cartJson');
+Route::post('/add-to-cart', [CartController::class,'addToCart'])->name('front.addToCart');
+Route::post('/update-cart', [CartController::class,'updateCart'])->name('front.updateCart');
+Route::post('/delete-cart-item', [CartController::class,'deleteCartItem'])->name('front.deleteCartItem');
+Route::post('/clear-cart', [CartController::class,'clearCart'])->name('front.clearCart');
 
 Route::group(['prefix' => 'admin'], function (){
     Route::group(['middleware' => 'admin.guest'], function (){

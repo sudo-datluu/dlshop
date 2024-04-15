@@ -7,8 +7,13 @@
     aspect-ratio: 1/1;
 }
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 footer {
-    position: absolute !important; 
-    bottom: 0 !important;
+    margin-top: auto !important;
     width: 100% !important;
 }
