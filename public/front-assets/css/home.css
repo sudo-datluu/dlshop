@@ -6,3 +6,9 @@
     height: auto;
     aspect-ratio: 1/1;
 }
+
+footer {
+    position: absolute !important; 
+    bottom: 0 !important;
+    width: 100% !important;
+}

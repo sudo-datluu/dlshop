@@ -1,4 +1,5 @@
 @extends('front.layouts.app')
+@extends('front.layouts.search')
 
 @section('custom-css')
 <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/home.css') }}" />
@@ -22,16 +23,15 @@
 							@foreach(getCategories() as $key => $category)
 							<div class="accordion-item">
 								<h2 class="accordion-header" id="headingOne">
-									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{$key}}" aria-expanded="false" aria-controls="collapseOne">
-										{{ $category->name }}
-									</button>
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{$key}}" aria-expanded="false" aria-controls="collapseOne"> {{$category->name}}</button>
 								</h2>
-								<div id="collapseOne-{{$key}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+								<div id="collapseOne-{{$key}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 									<div class="accordion-body">
 										<div class="navbar-nav">
+											<a href="{{route('front.home', $category->slug)}}" class="nav-link nav-item">All {{$category->name }}</a>
 											@if($category->sub_category->isNotEmpty())
 											@foreach($category->sub_category as $subcategory)
-											<a href="" class="nav-item nav-link">{{ $subcategory->name }}</a>
+											<a href="{{route('front.home', [$category->slug, $subcategory->slug])}}" class="nav-item nav-link">{{ $subcategory->name }}</a>
 											@endforeach
 											@endif
 										</div>
@@ -60,30 +60,41 @@
 							</div>
 						</div>
 					</div>
-					
+
 					@if ($products->isNotEmpty())
-						@foreach ($products as $product)
-							<div class="col-md-4">
-								<div class="card product-card">
-									<div class="product-image position-relative">
-										<a href="" class="product-img"><img class="custom-product-img card-img-top" src="{{ $product->image }}" alt=""></a>
-										<a class="whishlist" href="222"><i class="far fa-heart"></i></a>
-		
-										<div class="product-action">
-											<a class="btn btn-dark" href="#">
-												<i class="fa fa-shopping-cart"></i> Add To Cart
-											</a>
-										</div>
-									</div>
-									<div class="card-body text-center mt-3">
-										<a class="h6 link" href="product.php">{{$product->title}}</a>
-										<div class="price mt-2">
-											<span class="h5"><strong>${{$product->price}}</strong></span>
-										</div>
-									</div>
+					@foreach ($products as $product)
+					<div class="col-md-4">
+						<div class="card product-card">
+							<div class="product-image position-relative">
+								<a href="" class="product-img"><img class="custom-product-img card-img-top" src="{{ $product->image }}" alt=""></a>
+
+								<div class="product-action">
+									@if ($product->qty > 0)
+									<a class="btn btn-dark" href="#">
+										<i class="fa fa-shopping-cart"></i> Add To Cart
+									</a>
+									@else
+									<a class="btn btn-dark disabled" href="#">
+										<i class="fa fa-shopping-cart"></i> Out of stock
+									</a>
+									@endif
 								</div>
 							</div>
-						@endforeach
+							<div class="card-body text-center mt-3">
+								<a class="h6 link" href="product.php">{{$product->title}}</a>
+								<div class="price mt-2">
+									<span class="h5"><strong>${{$product->price}}</strong></span>
+									<br>
+									@if ($product->qty > 0)
+									<span class="h6 texy-primary">Instock: {{$product->qty}} {{$product->unit}}</span>
+									@else
+									<span class="h6 text-danger">Out of stock</span>
+									@endif
+								</div>
+							</div>
+						</div>
+					</div>
+					@endforeach
 					@endif
 					<!-- <div class="col-md-12 pt-5">
 						<nav aria-label="Page navigation example">
