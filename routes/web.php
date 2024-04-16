@@ -33,6 +33,9 @@ Route::post('/update-cart', [CartController::class,'updateCart'])->name('front.u
 Route::post('/delete-cart-item', [CartController::class,'deleteCartItem'])->name('front.deleteCartItem');
 Route::post('/clear-cart', [CartController::class,'clearCart'])->name('front.clearCart');
 
+Route::get('/checkout', [CartController::class,'checkout'])->name('front.checkout');
+Route::post('/process-checkout', [CartController::class,'processCheckout'])->name('front.processCheckout');
+
 Route::group(['prefix' => 'admin'], function (){
     Route::group(['middleware' => 'admin.guest'], function (){
         Route::get('/login', [AdminLoginController::class,'index'])->name('admin.login');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Models\Product;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -63,5 +64,30 @@ class CartController extends Controller
             'status' => true,
             'message' => 'Cart cleared'
         ]);
+    }
+
+    public function checkout() {
+        if (Cart::count() == 0) {
+            return redirect() -> route('front.cart');
+        }
+        return view('front.checkout');
+    }
+
+    public function processCheckout(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'mobile' => 'required|digits:10',
+            'street' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response() -> json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
     }
 }
