@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
@@ -89,5 +91,54 @@ class CartController extends Controller
                 'errors' => $validator->errors()
             ]);
         }
+
+        $qty_errror = [];
+        foreach (Cart::content() as $item) {
+            $product = Product::find($item->id);
+            if ($product->qty < $item->qty) {
+                $msg = $product->title . ' quantity can not greater than ' . $product->qty;
+                array_push($qty_errror, $msg);
+            }
+        }
+
+        if ($qty_errror != []) {
+            return response() -> json([
+                'status' => false,
+                'errors' => ['qty_errrors' => $qty_errror]
+            ]);
+        }
+
+        $order = new Order();
+        $order->name = $request->name;
+        $order->email = $request->email;
+        $order->mobile = $request->mobile;
+        $order->street = $request->street;
+        $order->city = $request->city;
+        $order->state = $request->state;
+        $order->total = Cart::subtotal(2, '.', '');
+        $order->save();
+
+        foreach (Cart::content() as $item) {
+            $orderItem = new OrderItem();
+            $orderItem->order_id = $order->id;
+            $orderItem->product_id = $item->id;
+            $orderItem->qty = $item->qty;
+            $orderItem->name = $item->name;
+            $orderItem->price = $item->price;
+            $orderItem->total = $item->price * $item->qty;
+
+            $product = Product::find($item->id);
+            $product->qty = $product->qty - $item->qty;
+            $product->save();
+            $orderItem->save();
+        }
+
+        Cart::destroy();
+
+        return response() -> json([
+            'status' => true,
+            'message' => 'Order placed successfully',
+            'order_url' => route('front.order', $order->id)
+        ]);
     }
 }

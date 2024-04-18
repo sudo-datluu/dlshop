@@ -36,27 +36,27 @@
                                         <p></p>
                                     </div>
                                 </div>
-    
+
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <input type="text" name="city" id="city" class="form-control" placeholder="City/Suburb">
                                         <p></p>
                                     </div>
                                 </div>
-    
+
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <select name="state" id="state" class="form-control">
                                             <option value="">Select territories</option>
-                                            <option value="1">NSW</option>
-                                            <option value="2">VIC</option>
-                                            <option value="3">QLD</option>
-                                            <option value="4">WA</option>
-                                            <option value="5">SA</option>
-                                            <option value="6">TAS</option>
-                                            <option value="7">ACT</option>
-                                            <option value="8">NT</option>
-                                            <option value="9">Others</option>
+                                            <option value="NSW">NSW</option>
+                                            <option value="VIC">VIC</option>
+                                            <option value="QLD">QLD</option>
+                                            <option value="WA">WA</option>
+                                            <option value="SA">SA</option>
+                                            <option value="TAS">TAS</option>
+                                            <option value="ACT">ACT</option>
+                                            <option value="NT">NT</option>
+                                            <option value="Others">Others</option>
                                         </select>
                                         <p></p>
                                     </div>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="sub-title">
-                        <h2>Order Summery</h3>
+                        <h2>Order Summary</h3>
                     </div>
                     <div class="card cart-summery">
                         <div class="card-body">
@@ -103,84 +103,94 @@
 
 @section('customJs')
 <script>
-    $("#orderForm").submit(function(){
+    $("#orderForm").submit(function() {
         event.preventDefault();
         $.ajax({
             url: "{{ route('front.processCheckout') }}",
             type: "POST",
             data: $("#orderForm").serialize(),
-            success: function(response){
+            success: function(response) {
                 var errors = response.errors;
-                if (errors.name) {
-                    $("#name").addClass('is-invalid')
-                        .siblings("p")
-                        .addClass('invalid-feedback')
-                        .html(errors.name.join("<br>"))
+                if (response.status) {
+                    window.location.href = response.order_url;
                 } else {
-                    $("#name").removeClass('is-invalid')
-                        .siblings("p")
-                        .removeClass('invalid-feedback')
-                        .html('')
-                }
+                    if (errors.name) {
+                        $("#name").addClass('is-invalid')
+                            .siblings("p")
+                            .addClass('invalid-feedback')
+                            .html(errors.name.join("<br>"))
+                    } else {
+                        $("#name").removeClass('is-invalid')
+                            .siblings("p")
+                            .removeClass('invalid-feedback')
+                            .html('')
+                    }
 
-                if (errors.email) {
-                    $("#email").addClass('is-invalid')
-                        .siblings("p")
-                        .addClass('invalid-feedback')
-                        .html(errors.email.join("<br>"))
-                } else {
-                    $("#email").removeClass('is-invalid')
-                        .siblings("p")
-                        .removeClass('invalid-feedback')
-                        .html('')
-                }
+                    if (errors.email) {
+                        $("#email").addClass('is-invalid')
+                            .siblings("p")
+                            .addClass('invalid-feedback')
+                            .html(errors.email.join("<br>"))
+                    } else {
+                        $("#email").removeClass('is-invalid')
+                            .siblings("p")
+                            .removeClass('invalid-feedback')
+                            .html('')
+                    }
 
-                if (errors.mobile) {
-                    $("#mobile").addClass('is-invalid')
-                        .siblings("p")
-                        .addClass('invalid-feedback')
-                        .html(errors.mobile.join("<br>"))
-                } else {
-                    $("#mobile").removeClass('is-invalid')
-                        .siblings("p")
-                        .removeClass('invalid-feedback')
-                        .html('')
-                }
+                    if (errors.mobile) {
+                        $("#mobile").addClass('is-invalid')
+                            .siblings("p")
+                            .addClass('invalid-feedback')
+                            .html(errors.mobile.join("<br>"))
+                    } else {
+                        $("#mobile").removeClass('is-invalid')
+                            .siblings("p")
+                            .removeClass('invalid-feedback')
+                            .html('')
+                    }
 
-                if (errors.street) {
-                    $("#street").addClass('is-invalid')
-                        .siblings("p")
-                        .addClass('invalid-feedback')
-                        .html(errors.street.join("<br>"))
-                } else {
-                    $("#street").removeClass('is-invalid')
-                        .siblings("p")
-                        .removeClass('invalid-feedback')
-                        .html('')
-                }
+                    if (errors.street) {
+                        $("#street").addClass('is-invalid')
+                            .siblings("p")
+                            .addClass('invalid-feedback')
+                            .html(errors.street.join("<br>"))
+                    } else {
+                        $("#street").removeClass('is-invalid')
+                            .siblings("p")
+                            .removeClass('invalid-feedback')
+                            .html('')
+                    }
 
-                if (errors.city) {
-                    $("#city").addClass('is-invalid')
-                        .siblings("p")
-                        .addClass('invalid-feedback')
-                        .html(errors.city.join("<br>"))
-                } else {
-                    $("#city").removeClass('is-invalid')
-                        .siblings("p")
-                        .removeClass('invalid-feedback')
-                        .html('')
-                }
-                
-                if (errors.state) {
-                    $("#state").addClass('is-invalid')
-                        .siblings("p")
-                        .addClass('invalid-feedback')
-                        .html(errors.state.join("<br>"))
-                } else {
-                    $("#state").removeClass('is-invalid')
-                        .siblings("p")
-                        .removeClass('invalid-feedback')
-                        .html('')
+                    if (errors.city) {
+                        $("#city").addClass('is-invalid')
+                            .siblings("p")
+                            .addClass('invalid-feedback')
+                            .html(errors.city.join("<br>"))
+                    } else {
+                        $("#city").removeClass('is-invalid')
+                            .siblings("p")
+                            .removeClass('invalid-feedback')
+                            .html('')
+                    }
+
+                    if (errors.state) {
+                        $("#state").addClass('is-invalid')
+                            .siblings("p")
+                            .addClass('invalid-feedback')
+                            .html(errors.state.join("<br>"))
+                    } else {
+                        $("#state").removeClass('is-invalid')
+                            .siblings("p")
+                            .removeClass('invalid-feedback')
+                            .html('')
+                    }
+
+
+                    if (errors.qty_errrors) {
+                        window.location.href = "{{ route('front.cart') }}"
+                        alert(errors.qty_errrors.join("\n"))
+                    }
                 }
             }
         })

@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
 
@@ -35,6 +36,8 @@ Route::post('/clear-cart', [CartController::class,'clearCart'])->name('front.cle
 
 Route::get('/checkout', [CartController::class,'checkout'])->name('front.checkout');
 Route::post('/process-checkout', [CartController::class,'processCheckout'])->name('front.processCheckout');
+
+Route::get('/orders/{orderId}', [OrderController::class,'order'])->name('front.order');
 
 Route::group(['prefix' => 'admin'], function (){
     Route::group(['middleware' => 'admin.guest'], function (){
