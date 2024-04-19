@@ -34,7 +34,7 @@
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm  border-0 text-center" value="{{$item->qty}}">
+                                    <input disabled type="text" class="form-control form-control-sm  border-0 text-center" value="{{$item->qty}}">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-dark btn-plus p-2 pt-1 pb-1 add-cart" data-id="{{ $item->rowId}}">
                                             <i class="fa fa-plus"></i>
