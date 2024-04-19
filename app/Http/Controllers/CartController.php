@@ -53,7 +53,9 @@ class CartController extends Controller
         $rowId = $request->rowId;
         Cart::remove($rowId);
         $message = 'Item removed from cart';
+        $isEmpty = Cart::count() == 0 ? true : false;
         return response() -> json([
+            'isEmpty' => $isEmpty,
             'newSubtotal' => Cart::subtotal(),
             'status' => true,
             'message' => $message

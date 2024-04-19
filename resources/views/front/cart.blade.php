@@ -143,6 +143,9 @@
                 },
                 dataType: "json",
                 success: function(response) {
+                    if (response.isEmpty) {
+                        window.location.reload();
+                    }
                     $('#' + rowId).remove();
                     $('.subtotal').text('$' + response.newSubtotal);
                 }
